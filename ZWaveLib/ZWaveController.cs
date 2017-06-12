@@ -267,14 +267,26 @@ namespace ZWaveLib
             get { return controllerStatus; }
         }
 
-        #region Controller commands
-
         /// <summary>
-        /// Queues the message.
+        /// Gets the logger.
         /// </summary>
-        /// <returns>The ZWaveMessage object itself.</returns>
-        /// <param name="message">Message.</param>
-        public ZWaveMessage QueueMessage(ZWaveMessage message)
+        /// <value>The logger.</value>
+        public Logger Logger
+        {
+            get
+            {
+                return Utility.logger;
+            }
+        }
+
+#region Controller commands
+
+/// <summary>
+/// Queues the message.
+/// </summary>
+/// <returns>The ZWaveMessage object itself.</returns>
+/// <param name="message">Message.</param>
+public ZWaveMessage QueueMessage(ZWaveMessage message)
         {
             bool addToQueue = true;
             var node = GetNode(message.NodeId);
