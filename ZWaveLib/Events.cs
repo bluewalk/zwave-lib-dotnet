@@ -45,7 +45,6 @@ namespace ZWaveLib
         public readonly DateTime Timestamp;
         public int Instance { get; internal set; }
         public NodeEvent NestedEvent { get; internal set; }
-        public readonly DateTime Timestamp;
 
         public NodeEvent(ZWaveNode node, EventParameter eventType, object eventValue, int instance)
         {

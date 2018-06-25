@@ -31,10 +31,6 @@ using System.Xml.Serialization;
 #if NETSTANDARD2_0
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using NLog.Config;
-using NLog.Layouts;
-using NLog.Targets;
 #else
 #endif
 using SerialPortLib;
@@ -55,25 +51,6 @@ namespace ZWaveLib
 #if NETSTANDARD2_0
         private ServiceProvider servicesProvider = new ServiceCollection()
             .AddTransient<SerialPortInput>()
-            .AddLogging(loggingBuilder =>
-            {
-                // configure Logging with NLog
-                loggingBuilder.ClearProviders();
-                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-                loggingBuilder.AddNLog(new LoggingConfiguration
-                {
-                    LoggingRules =
-                    {
-                        new LoggingRule(
-                            "*",
-                            NLog.LogLevel.Debug,
-                            new ConsoleTarget
-                            {
-                                Layout = new SimpleLayout("${longdate} ${callsite} ${level} ${message} ${exception}")
-                            })
-                    }
-                });
-            })
             .BuildServiceProvider();
 #endif
         private string portName = "";
