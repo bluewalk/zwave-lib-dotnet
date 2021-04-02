@@ -1,4 +1,8 @@
-﻿# Z-Wave Home Automation library for .NET
+[![Build status](https://ci.appveyor.com/api/projects/status/9x2lxm4b1x4bmru9?svg=true)](https://ci.appveyor.com/project/genemars/zwave-lib-dotnet)
+[![NuGet](https://img.shields.io/nuget/v/ZWaveLib.svg)](https://www.nuget.org/packages/ZWaveLib/)
+![License](https://img.shields.io/github/license/genielabs/zwave-lib-dotnet.svg)
+
+# Z-Wave Home Automation library for .NET
 
 ## Features
 
@@ -15,6 +19,28 @@ ZWaveLib  is available as a [NuGet package](https://www.nuget.org/packages/ZWave
 
 Run `Install-Package ZWaveLib` in the [Package Manager Console](http://docs.nuget.org/docs/start-here/using-the-package-manager-console) or search for “ZWaveLib” in your IDE’s package management plug-in.
 
+## .Net Standard 2.0 notes
+
+When running under Linux you might encouter the following error:
+```
+Unable to load shared library 'libnserial.so.1' or one of its dependencies.
+```
+in which case `serialportstream` library is missing.
+
+To fix this error clone and build `serialportstream`:
+```
+git clone https://github.com/jcurl/serialportstream.git
+cd serialportstream/
+cd dll/serialunix/
+./build.sh
+```
+
+Then copy generated files `build/libnserial/libnserial.so*` to the app folder and lauch the app with `LD_LIBRARY_PATH` set to the current directory:
+
+```
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:. dotnet exec TestApp.NetCore.dll
+```
+
 ## Example usage
 ```csharp
 
@@ -28,6 +54,9 @@ controller.ControllerStatusChanged += Controller_ControllerStatusChanged;;
 controller.DiscoveryProgress += Controller_DiscoveryProgress;
 controller.NodeOperationProgress += Controller_NodeOperationProgress;
 controller.NodeUpdated += Controller_NodeUpdated;
+
+// Open connection
+controller.Connect();
 
 // Issue some commands on a dimmer and a thermostat node
 
@@ -95,5 +124,7 @@ void Controller_NodeUpdated(object sender, NodeUpdatedEventArgs args)
 
 ```
 
-A test program is also shipped with the ZWaveLib source code:
-https://github.com/genielabs/zwave-lib-dotnet/blob/master/Test.ZWave/Program.cs
+## Who's using this library?
+
+- [HomeGenie Server](http://github.com/genielabs/HomeGenie): smart home automation server
+- [MIG.HomeAuto](https://github.com/genielabs/mig-homeauto): home automation API

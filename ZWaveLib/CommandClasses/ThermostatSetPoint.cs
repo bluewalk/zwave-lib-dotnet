@@ -1,18 +1,19 @@
 ﻿/*
-    This file is part of ZWaveLib Project source code.
+  This file is part of ZWaveLib (https://github.com/genielabs/zwave-lib-dotnet)
 
-    ZWaveLib is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  Copyright (2012-2018) G-Labs (https://github.com/genielabs)
 
-    ZWaveLib is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-    You should have received a copy of the GNU General Public License
-    along with ZWaveLib.  If not, see <http://www.gnu.org/licenses/>.  
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
 */
 
 /*
@@ -21,7 +22,6 @@
  */
 
 using System.Collections.Generic;
-using System.Dynamic;
 
 using ZWaveLib.Values;
 
@@ -60,19 +60,18 @@ namespace ZWaveLib.CommandClasses
             setPoint.Scale = zvalue.Scale;
             setPoint.Size = zvalue.Size;
             setPoint.Value = zvalue.Value;
-            dynamic ptype = new ExpandoObject();
-            ptype.Type = (Value)message[2];
             // convert from Fahrenheit to Celsius if needed
-            ptype.Value = (zvalue.Scale == (int)ZWaveTemperatureScaleType.Fahrenheit
-                ? SensorValue.FahrenheitToCelsius(zvalue.Value)
-                : zvalue.Value);
+            var ptype = new {
+                Type = (Value)message[2],
+                Value = (zvalue.Scale == (int)ZWaveTemperatureScaleType.Fahrenheit ? SensorValue.FahrenheitToCelsius(zvalue.Value) : zvalue.Value)
+            };
             return new NodeEvent(node, EventParameter.ThermostatSetPoint, ptype, 0);
         }
 
         public static ZWaveMessage Get(ZWaveNode node, Value ptype)
         {
-            return node.SendDataRequest(new byte[] { 
-                (byte)CommandClass.ThermostatSetPoint, 
+            return node.SendDataRequest(new byte[] {
+                (byte)CommandClass.ThermostatSetPoint,
                 (byte)Command.ThermostatSetPointGet,
                 (byte)ptype
             });
@@ -81,9 +80,9 @@ namespace ZWaveLib.CommandClasses
         public static ZWaveMessage Set(ZWaveNode node, Value ptype, double temperature)
         {
             List<byte> message = new List<byte>();
-            message.AddRange(new byte[] { 
-                (byte)CommandClass.ThermostatSetPoint, 
-                (byte)Command.ThermostatSetPointSet, 
+            message.AddRange(new byte[] {
+                (byte)CommandClass.ThermostatSetPoint,
+                (byte)Command.ThermostatSetPointSet,
                 (byte)ptype
             });
             var setPoint = ThermostatSetPoint.GetSetPointData(node);
