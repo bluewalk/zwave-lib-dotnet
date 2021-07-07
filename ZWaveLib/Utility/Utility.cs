@@ -1,19 +1,18 @@
 /*
-  This file is part of ZWaveLib (https://github.com/genielabs/zwave-lib-dotnet)
+    This file is part of ZWaveLib Project source code.
 
-  Copyright (2012-2018) G-Labs (https://github.com/genielabs)
+    ZWaveLib is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+    ZWaveLib is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+    You should have received a copy of the GNU General Public License
+    along with ZWaveLib.  If not, see <http://www.gnu.org/licenses/>.  
 */
 
 /*
@@ -23,89 +22,12 @@
 
 using System;
 using System.Collections.Generic;
-#if NET40 || NET461
-using NLog;
-#else
-using NLog.Extensions.Logging;
-#endif
-
-#if NETSTANDARD2_0
-using Microsoft.Extensions.Logging;
-#endif
 
 namespace ZWaveLib
 {
     public class Utility
     {
-
-        internal static class logger
-        {
-#if NET40 || NET461
-            internal static Logger _logger = LogManager.GetCurrentClassLogger();
-#else
-            private static readonly ILogger<Utility> _logger = new Logger<Utility>(new NLogLoggerFactory());
-#endif
-
-            public static void Info(String message, params object[] args)
-            {
-#if NET40 || NET461
-                _logger.Info(message, args);
-#else
-                _logger.LogInformation(message, args);
-#endif
-            }
-
-            public static void Warn(String message, params object[] args)
-            {
-#if NET40 || NET461
-                _logger.Warn(message, args);
-#else
-                _logger.LogWarning(message, args);
-#endif
-            }
-
-            public static void Error(String message, params object[] args)
-            {
-#if NET40 || NET461
-                _logger.Error(message, args);
-#else
-                _logger.LogError(message, args);
-#endif
-            }
-
-            public static void Error(Exception exception)
-            {
-#if NET40 || NET461
-                _logger.Error(exception);
-#else
-                _logger.LogError(exception, exception.Message);
-#endif
-            }
-
-            public static void Debug(String message, params object[] args)
-            {
-#if NET40 || NET461
-                _logger.Debug(message, args);
-#else
-                _logger.LogDebug(message, args);
-#endif
-            }
-
-            public static void Trace(String message, params object[] args)
-            {
-#if NET40 || NET461
-                _logger.Trace(message, args);
-#else
-                _logger.LogTrace(message, args);
-#endif
-            }
-
-            public static ILogger GetLogger()
-            {
-                return _logger;
-            }
-
-        }
+        internal static Logger logger = new Logger();
 
         //from
         //http://stackoverflow.com/questions/311165/how-do-you-convert-byte-array-to-hexadecimal-string-and-vice-versa
